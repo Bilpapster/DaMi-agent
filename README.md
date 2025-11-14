@@ -21,12 +21,12 @@ _DaMi is a AI agent specialized in Data Mining. He particularly likes clustering
   - [Test your tools with DaMi](#test-your-tools-with-dami)
   - [Use a different LLM](#use-a-different-llm)
   - [Ask a question about the assignment](#ask-a-question-about-the-assignment)
- 
+
 - [Understand what you have done](#understand-what-you-have-done) &larr; &larr; &larr; Read this to get the most out of the assignment
 
 ## Prerequisites
 This section covers the prerequisites for running DaMi. All steps described below need to be completed _just once_ **per person**.
-Please make sure that you complete the prerequisites in the order they are presented. 
+Please make sure that you complete the prerequisites in the order they are presented.
 Once you have set up all the prerequisites, move to the [How to](#how-to) section.
 
 ### Environment file
@@ -35,80 +35,72 @@ An environment file (usually `.env`) is a plain text file that stores configurat
 **Your task:** Download the `.env` file from E-learning. Place it in the root folder of the project (i.e., where this README is located).
 
 ### `uv` installation
-`uv` is a unified package and project manager for Python. It combines `pip`, `pyenv`, and `Poetry` into a single, highly performant
-tool written in Rust. 
+`uv` is a unified package and project manager for Python. It combines `pip`, `pyenv`, and `Poetry` into a single, highly performant tool written in Rust. This tool will be used to manage all Python dependencies and run DaMi's components throughout the assignment.
 
-**Your task:** Navigate to `uv`'s [official documentation](https://docs.astral.sh/uv/getting-started/installation/) and run the 
-installation command for your operating system.
+**Your task:** Navigate to `uv`'s [official documentation](https://docs.astral.sh/uv/getting-started/installation/) and run the installation command for your operating system.
+
+**Verification (optional):** After installation, you can verify that `uv` is properly installed by running `uv --version` in your terminal. You should see a version number printed.
+
+**Common issue:** You might see an error like:
+`npx not found. Please ensure Node.js and cli.py npm are properly installed and added to your system PATH.`
+
+If that message occurs: install Node.js (which provides `npx`).
 
 ### Kaggle account
-Kaggle is an online community platform for data scientists and machine learning engineers that hosts data science competitions, 
-provides datasets, and offers a web-based environment for building and sharing models.
+Kaggle is an online community platform for data scientists and machine learning engineers that hosts data science competitions, provides datasets, and offers a web-based environment for building and sharing models. For this assignment, you will need a Kaggle account with phone verification completed to access GPU resources in notebooks.
 
-**Your task:** If you already have a Kaggle account, make sure you can log in. If you do not have an account, create one for free
-[here](https://www.kaggle.com/account/login?phase=startRegisterTab). You will need a valid phone number to receive a verification SMS.
+**Your task:** If you already have a Kaggle account, make sure you can log in. If you do not have an account, create one for free [here](https://www.kaggle.com/account/login?phase=startRegisterTab). You will need a valid phone number to receive a verification SMS.
+
+**Important:** The phone verification step is mandatory for using GPU acceleration in Kaggle notebooks. Without completing phone verification, you may encounter errors when trying to enable GPU or authenticate with NGROK later in the process.
 
 ### NGROK account
 
-NGROK is a tool that creates a secure tunnel between a public internet endpoint and a local server on your machine, 
-allowing you to expose your local development environment to the internet.
+NGROK is a tool that creates a secure tunnel between a public internet endpoint and a local server on your machine, allowing you to expose your local development environment to the internet.
 
-**Your task:** If you already have an NGROK account, make sure you can log in. If you do not have an account, create one for free.
-[here](https://dashboard.ngrok.com/signup)
+**Your task:** If you already have an NGROK account, make sure you can log in. If you do not have an account, create one for free. [here](https://dashboard.ngrok.com/signup)
 
 ### NGROK authentication token
 
-An NGROK authentication token is a unique API key that authorizes the ngrok agent to connect to your account, enabling most of 
-its features like tunneling.
+An NGROK authentication token is a unique API key that authorizes the ngrok agent to connect to your account, enabling most of its features like tunneling.
 
-**Your task:** Make sure you have created an NGROK account in the previous step. Then, find your token through 
-[NGROK's portal](https://dashboard.ngrok.com/get-started/your-authtoken). You will need this token for the next step.
+**Your task:** Make sure you have created an NGROK account in the previous step. Then, find your token through [NGROK's portal](https://dashboard.ngrok.com/get-started/your-authtoken). You will need this token for the next step.
 
 ### Kaggle notebook upload
 
-A Kaggle Notebook is a cloud-based, interactive environment for data science and machine learning that runs in a web browser. 
-It allows users to write and execute code in Python.
+A Kaggle Notebook is a cloud-based, interactive environment for data science and machine learning that runs in a web browser. It allows users to write and execute code in Python.
 
-**Your task:** Download the `llm_DaMi.ipynb` located in the `kaggle/` directory of the repository. Then, navigate to
-[Kaggle](https://www.kaggle.com/) &rarr; _+ Create_ &rarr; _<> Notebook_ &rarr; (a new notebook opens in your browser) 
-&rarr; File &rarr; Import Notebook &rarr; (upload the `llm_DaMi.ipynb` file) &rarr; (optional) rename the notebook title 
-to `llm_DaMi` for convenience. Then, click _Add-ons_ &rarr; _Secrets_. You must see a secret called `NGROK_AUTHTOKEN`.
-Edit the value by pasting the authentication token from the previous step. Make sure to save your changes.
+**Your task:** Download the `llm_DaMi.ipynb` located in the `kaggle/` directory of the repository. Then, navigate to [Kaggle](https://www.kaggle.com/) &rarr; _+ Create_ &rarr; _<> Notebook_ &rarr; (a new notebook opens in your browser) &rarr; File &rarr; Import Notebook &rarr; (upload the `llm_DaMi.ipynb` file) &rarr; (optional) rename the notebook title to `llm_DaMi` for convenience. Then, click _Add-ons_ &rarr; _Secrets_. You must see a secret called `NGROK_AUTHTOKEN`. Edit the value by pasting the authentication token from the previous step. Make sure to save your changes.
 
 **Congratulations! You have successfully completed all the prerequisites!**
- 
+
 ## How to
 This section provides instructions on how to perform various tasks in order to help DaMi get access to high-quality, well-explained tools.
 
 ### Edit the system prompt
-The system prompt is defined in the `src/agent/system_prompt.py`. Feel free to experiment with different variations of the system prompt. Make sure to restart your agent for the changes to take effect.
+The system prompt is defined in the `src/agent/system_prompt.py`. Feel free to experiment with different variations of the system prompt.
+
+**Restarting the agent:** After making changes to the system prompt, you need to restart DaMi for the changes to take effect. This involves two steps:
+1. **Stop the local UI:** If DaMi's chat interface is running locally, press `Ctrl + C` in the terminal where you ran the Streamlit command to stop it.
+2. **Restart the local UI:** From the `src/` directory, run `uv run streamlit run ui/chat_interface.py` again to start DaMi with your updated system prompt.
+
+**Note:** You do NOT need to restart the Kaggle notebook when changing the system prompt - only restart the local Streamlit interface.
 
 ### Add a dataset
 **PENDING**
 
 ### Add a tool
-All tools that DaMi has access to are placed in the `src/tools/` directory of the project. They are further organized into sub-directories based on
-their domain. For example, the tools for clustering can be found inside the `src/tools/clustering/` directory. To add a new tool, see how existing tools
-are defined and create yours! 
+All tools that DaMi has access to are placed in the `src/tools/` directory of the project. They are further organized into sub-directories based on their domain. For example, the tools for clustering can be found inside the `src/tools/clustering/` directory. To add a new tool, see how existing tools are defined and create yours!
 
 _Hint:_ You might need to change more than one files to make your tool visible to DaMi!
- 
+
 ### Test your tools without DaMi
 
-From inside the `src/` directory run  `uv run mcp dev mcp_server.py` in a terminal. If this is the first time you run this command, you may
-be asked to install some packages. Type `y` and hit enter. You must see a web interface in your browser. 
-Click _Connect_ &rarr; _Tools_ &rarr; _List Tools_. You must see all available tools. Select the one you want to test and fill in the parameters.
-Click _Run tool_ to call the tool (as if you were DaMi) and see the output. Debug your tool if the output does not match your expectations. 
+From inside the `src/` directory run  `uv run mcp dev mcp_server.py` in a terminal. If this is the first time you run this command, you may be asked to install some packages. Type `y` and hit enter. You must see a web interface in your browser. Click _Connect_ &rarr; _Tools_ &rarr; _List Tools_. You must see all available tools. Select the one you want to test and fill in the parameters. Click _Run tool_ to call the tool (as if you were DaMi) and see the output. Debug your tool if the output does not match your expectations.
 
-**Note**: We have added a dummy `add` tool, in case you want a quick verification that your MCP server works. Once you set everything up, feel
-free to remove this tool (or even the whole `src/tools/math/` directory).
+**Note**: We have added a dummy `add` tool, in case you want a quick verification that your MCP server works. Once you set everything up, feel free to remove this tool (or even the whole `src/tools/math/` directory).
 
 ### Improve the description of a tool
-All tools that DaMi has access to are placed in the `src/tools/` directory of the project. They are further organized into sub-directories based on
-their domain. For example, the tools for clustering can be found inside the `src/tools/clustering/` directory. What DaMi actually sees for every tool
-is the documentation (docstrings) of each tool. To improve the documentation of an existing tool, review the tool to understand what the source code
-does and, then, update the docstrings to clearly (and concisely) reflect the tool's functionality. Imagine you are DaMi. How would you explain the tool to
-yourself so that you know when to use (and when to not use) it, without looking at the source code?
+All tools that DaMi has access to are placed in the `src/tools/` directory of the project. They are further organized into sub-directories based on their domain. For example, the tools for clustering can be found inside the `src/tools/clustering/` directory. What DaMi actually sees for every tool is the documentation (docstrings) of each tool. To improve the documentation of an existing tool, review the tool to understand what the source code does and, then, update the docstrings to clearly (and concisely) reflect the tool's functionality. Imagine you are DaMi. How would you explain the tool to yourself so that you know when to use (and when to not use) it, without looking at the source code?
 
 ### Test your tools with DaMi
 

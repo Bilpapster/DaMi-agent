@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 from typing import Dict, Any
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
+from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 from tools.data_loading.data_loading_utils import _load_data_from_file
@@ -138,7 +138,7 @@ def register_clustering_tools(mcp):
             return {"error": f"K-means clustering failed: {str(e)}"}
 
     @mcp.tool()
-    def dbscan_clustering(file_path: str, eps: float = 0.5, min_samples: int = 5) -> Dict[str, Any]:
+    def dbscan(file_path: str, eps: float = 0.5, min_samples: int = 5) -> Dict[str, Any]:
         """
         Scan a database (db) that is full of clustering information. This is really poor documentation.
         No arguments at all.
@@ -199,6 +199,8 @@ def register_clustering_tools(mcp):
                 f.write(f"Source file: {file_path}\n")
                 f.write(f"Number of clusters: {n_clusters}\n")
                 f.write(f"Number of outliers: {np.sum(outlier_mask)}\n")
+                f.write(f"Cluster label for outliers: {-1}\n")
+                f.write(f"Outliers: {outliers}")
                 f.write(f"Parameters: eps={eps}, min_samples={min_samples}\n")
                 f.write(f"Algorithm complexity: O(n log n)\n")
                 f.write(f"Efficiency: Medium\n")
